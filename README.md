@@ -7,13 +7,13 @@ A modern, responsive portfolio website built with HTML, CSS, and JavaScript. Fea
 ## ✨ Features
 
 ### Core Features
-- 🎨 **Modern Design** - Clean and professional layout with gradient accents
-- 🌓 **Dark Mode** - Toggle between light and dark themes with localStorage persistence
-- 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
-- ⚡ **Smooth Animations** - Fade-in effects and smooth transitions throughout
-- 🎯 **Interactive Navigation** - Active section highlighting and smooth scrolling
-- 📧 **Contact Form** - Built-in form validation with user feedback
-- 🎨 **Project Filtering** - Filter projects by category (Web, Mobile, Design)
+-  **Modern Design** - Clean and professional layout with gradient accents
+-  **Dark Mode** - Toggle between light and dark themes with localStorage persistence
+-  **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
+-  **Smooth Animations** - Fade-in effects and smooth transitions throughout
+-  **Interactive Navigation** - Active section highlighting and smooth scrolling
+-  **Contact Form** - Built-in form validation with user feedback
+-  **Project Filtering** - Filter projects by category (Web, Mobile, Design)
 
 ### Technical Features
 - Desktop-first responsive design approach
