@@ -1,8 +1,10 @@
 # Portfolio Website
 
-A modern, responsive portfolio website built with HTML, CSS, and JavaScript. Features a clean design, dark mode toggle, smooth animations, and mobile-friendly navigation.
+A modern, responsive portfolio website built with HTML, CSS, and JavaScript.
 
-![Portfolio Preview](https://denny-sathwik.github.io/portfolio-website/)
+
+
+🔗 Live Demo: [denny-sathwik.github.io/portfolio-website](https://denny-sathwik.github.io/portfolio-website/)
 
 
 ### Core Features
