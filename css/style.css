@@ -427,7 +427,7 @@ body.dark-theme .hero__title {
     filter: blur(2px);
 }
 
-.hero__profile-img {
+.home__profile-img {
     position: relative;
     z-index: 2;
     width: 400px;
