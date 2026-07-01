@@ -3,13 +3,14 @@
 ## Table of Contents
 1. [Initial Setup](#initial-setup)
 2. [Making Changes](#making-changes)
-3. [Add / Update Resume Download](#add--update-resume-download)
-4. [Add / Update Project Links (Live Demo & GitHub)](#add--update-project-links-live-demo--github)
-5. [Add a New Project Card](#add-a-new-project-card)
-6. [Testing Locally](#testing-locally)
-7. [Pushing to GitHub](#pushing-to-github)
-8. [Project Structure](#project-structure)
-9. [Common Tasks](#common-tasks)
+3. [Update Project Photos](#update-project-photos)
+4. [Add / Update Resume Download](#add--update-resume-download)
+5. [Add / Update Project Links (Live Demo & GitHub)](#add--update-project-links-live-demo--github)
+6. [Add a New Project Card](#add-a-new-project-card)
+7. [Testing Locally](#testing-locally)
+8. [Pushing to GitHub](#pushing-to-github)
+9. [Project Structure](#project-structure)
+10. [Common Tasks](#common-tasks)
 
 ---
 
@@ -86,6 +87,158 @@ Edit css/style.css — change the primary color:
 :root {
     --primary-color: #6366f1;
 }
+```
+
+---
+
+## Update Project Photos
+
+Each project card displays a screenshot image in the top half of the card.
+All project images live in the `images/projects/` folder.
+
+### Image requirements
+
+| Property    | Recommendation                         |
+|-------------|----------------------------------------|
+| Format      | `.jpg` or `.png`                        |
+| Dimensions  | 800 × 600 px (4:3) or 1280 × 720 px (16:9) |
+| File size   | Under 500 KB per image                 |
+| Color space | sRGB                                   |
+
+> **Tip — take a screenshot of the running project:** open the app in a browser, press F12 → toggle device toolbar, set a fixed width (e.g. 1280 px), then use the browser's screenshot tool or a tool like ShareX / Snagit to capture it.
+
+---
+
+### Current image map
+
+| Card | Project title                              | Image file                          | Line in index.html |
+|------|--------------------------------------------|-------------------------------------|--------------------|
+| 1    | Basket Buddy                               | `images/projects/project1.jpg`      | 222                |
+| 2    | AI Investment Strategy Advisory            | `images/projects/project2.jpg`      | 255                |
+| 3    | Pneumonia Detection System                 | `images/projects/project3.jpg`      | 289                |
+| 4    | Blockchain-Based Certificate Verification  | `images/projects/project4.jpg`      | 324                |
+| 5    | Weather Dashboard                          | `images/projects/project5.jpg`      | 358                |
+| 6    | My Portfolio                               | `images/projects/project6.jpg`      | 392                |
+
+Profile photos used in other sections:
+
+| Section     | Image file                               | Line in index.html |
+|-------------|------------------------------------------|--------------------|
+| Hero (home) | `images/projects/home-profile.jpg`       | 110                |
+| About Me    | `images/projects/about-profile.jpg`      | 123                |
+
+---
+
+### Step 1 — Prepare your screenshot
+
+1. Take a screenshot of the finished project (browser, mockup tool, or design file).
+2. Resize to **800 × 600 px** (use Paint, GIMP, Squoosh, or any image editor).
+3. Export / save as `.jpg` with quality **80–90%** to keep the file small.
+4. Rename the file to match the filename in the table above (e.g. `project1.jpg`).
+
+> To compress an image online without installing software, use **https://squoosh.app** — drag in the file, pick MozJPEG, set quality to 80, download.
+
+---
+
+### Step 2 — Place the file in the right folder
+
+```
+portfolio-website/
+    images/
+        projects/
+            project1.jpg   <- Basket Buddy screenshot
+            project2.jpg   <- AI Investment screenshot
+            project3.jpg   <- Pneumonia Detection screenshot
+            project4.jpg   <- Blockchain Certificate screenshot
+            project5.jpg   <- Weather Dashboard screenshot
+            project6.jpg   <- My Portfolio screenshot
+            home-profile.jpg   <- Hero section photo (already exists)
+            about-profile.jpg  <- About section photo (already exists)
+```
+
+Use exactly these filenames — they are already referenced in `index.html`.
+
+---
+
+### Step 3 — (Optional) Use a different filename or format
+
+If you prefer a different filename (e.g. `basket-buddy.png`), update the `src` attribute on the matching line in `index.html`:
+
+```html
+<!-- Before (line 222) -->
+<img src="images/projects/project1.jpg" alt="Project 1">
+
+<!-- After -->
+<img src="images/projects/basket-buddy.png" alt="Basket Buddy">
+```
+
+Also update the `alt` text to describe the project — this helps accessibility and SEO.
+
+---
+
+### Step 4 — Update all six cards at once (quick reference)
+
+Open `index.html` and change only the `src` values on these lines:
+
+| Line | Change `src` to                          |
+|------|------------------------------------------|
+| 222  | `images/projects/project1.jpg`           |
+| 255  | `images/projects/project2.jpg`           |
+| 289  | `images/projects/project3.jpg`           |
+| 324  | `images/projects/project4.jpg`           |
+| 358  | `images/projects/project5.jpg`           |
+| 392  | `images/projects/project6.jpg`           |
+
+---
+
+### Step 5 — Update profile photos
+
+**Hero section** (line 110):
+```html
+<img src="images/projects/home-profile.jpg" alt="Profile" class="home__profile-img">
+```
+Replace `home-profile.jpg` in `images/projects/` with your photo.
+Recommended size: **400 × 400 px**, square crop.
+
+**About section** (line 123):
+```html
+<img src="images/projects/about-profile.jpg" alt="Profile" class="about__img">
+```
+Replace `about-profile.jpg` in `images/projects/` with your photo.
+Recommended size: **400 × 500 px**, portrait crop.
+
+---
+
+### Step 6 — Test locally
+
+Start the local server and open http://localhost:8000:
+
+```
+npx http-server -p 8000
+```
+
+Check that each card shows the correct screenshot.
+If an image does not appear:
+- Confirm the filename and extension match exactly (case-sensitive on GitHub Pages: `Project1.jpg` ≠ `project1.jpg`).
+- Check the browser console (F12 → Console) for a 404 error — it will show the exact path the browser tried to load.
+- Hard-refresh with **Ctrl + Shift + R** to bypass cache.
+
+---
+
+### Step 7 — Commit and push
+
+```
+git add images/projects/
+git commit -m "Add project screenshots"
+git push origin main
+```
+
+If you also edited `index.html` to change filenames or alt text:
+
+```
+git add images/projects/ index.html
+git commit -m "Add project screenshots and update image references"
+git push origin main
 ```
 
 ---
@@ -365,8 +518,9 @@ portfolio-website/
 4. Test locally then push
 
 ### Change Profile Photo
-1. Replace images/projects/profile.jpg with your photo (400x400px recommended)
-2. Keep the same filename or update references in HTML
+1. Hero section: replace `images/projects/home-profile.jpg` (400×400 px recommended)
+2. About section: replace `images/projects/about-profile.jpg` (400×500 px recommended)
+3. Keep the same filenames — no HTML changes needed. Or rename the files and update `src` on lines 110 and 123 in `index.html`.
 
 ### Update Skills
 Find lines 160-202 in index.html:
@@ -473,4 +627,4 @@ git log --oneline             # view history
 ---
 
 **Last Updated:** June 25, 2026
-**Version:** 1.1
+**Version:** 1.2
