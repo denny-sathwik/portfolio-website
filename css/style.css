@@ -100,6 +100,7 @@ body {
     color: var(--text-color);
     background-color: var(--bg-color);
     transition: background-color var(--transition-base), color var(--transition-base);
+    overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -857,6 +858,11 @@ body.dark-theme .skills {
    CERTIFICATE-SECTION
    =================================== */
 
+.certificates {
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
 
 .card {
   width: 100%;
@@ -877,6 +883,7 @@ body.dark-theme .skills {
 .slider {
   width: 100%;
   height: var(--height);
+  overflow: hidden;
   mask-image: linear-gradient(to right, transparent, #000 10% 90%, transparent);
 }
 .slider .list {
