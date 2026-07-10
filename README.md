@@ -6,7 +6,7 @@ A modern, responsive portfolio website built with HTML, CSS, and JavaScript.
 
 🔗 Live Demo: [denny-sathwik.github.io/portfolio-website](https://denny-sathwik.github.io/portfolio-website/)
 
-![Home Page](images/project6.jpg)
+![Home Page](images/projects/project6.jpg)
 
 
 ### Core Features
