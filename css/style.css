@@ -19,7 +19,6 @@ html {
 :root {
     /* Light Theme Colors */
     --primary-color: #2563eb;
-    --secondary-color: #f59e0b;
     --text-color: #000000;
     --text-light: #4e5055;
     --bg-color: #ffffff;
@@ -76,7 +75,6 @@ html {
 /* Dark Theme */
 body.dark-theme {
     --primary-color: #21c021;
-    --secondary-color: #fbbf24;
     --text-color: #F8F8F8;
     --text-light: #969696;
     --bg-color: #0A0A0A;
@@ -1201,9 +1199,10 @@ body.dark-theme .contact {
 }
 
 /* ===================================
-   SCROLL ANIMATIONS
+   SCROLL / CINEMATIC ANIMATIONS
    =================================== */
 
+/* Base reveal (still used for sections/cards) */
 .fade-in {
     opacity: 0;
     transform: translateY(30px);
@@ -1214,6 +1213,111 @@ body.dark-theme .contact {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Stagger reveal support */
+.reveal-stagger {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s ease,
+        filter 0.7s ease;
+    transition-delay: calc(var(--stagger) * 1ms);
+    filter: blur(6px);
+}
+
+.reveal-stagger.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+}
+
+/* Section bloom / shine when revealed */
+.section-bloom {
+    position: relative;
+}
+
+/* Bloom/shine disabled to avoid unwanted background color shifts */
+.section-bloom::after {
+    content: "";
+    display: none;
+}
+
+body.dark-theme .section-bloom::after {
+    display: none;
+}
+
+.section-bloom.visible::after {
+    opacity: 0;
+}
+
+
+/* Magnetic button */
+.btn[data-magnetic="true"] {
+    position: relative;
+    will-change: transform;
+}
+
+.btn[data-magnetic="true"]::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: radial-gradient(180px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.38), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.btn[data-magnetic="true"] > * {
+    position: relative;
+    z-index: 1;
+}
+
+.btn[data-magnetic="true"]:hover::before {
+    opacity: 1;
+}
+
+/* 3D tilt cards */
+.tilt {
+    transform-style: preserve-3d;
+    perspective: 800px;
+    will-change: transform;
+}
+
+.tilt::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 20%), rgba(37, 99, 235, 0.22), transparent 45%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+body.dark-theme .tilt::after {
+    background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 20%), rgba(33, 192, 33, 0.18), transparent 45%);
+}
+
+.tilt:hover::after {
+    opacity: 1;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .tilt,
+    .tilt::after {
+        transition: none !important;
+        animation: none !important;
+    }
+    .reveal-stagger {
+        filter: none;
+        transition: opacity 0.01s linear, transform 0.01s linear;
+    }
+}
+
 
 /* ===================================
    RESPONSIVE DESIGN - TABLET

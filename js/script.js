@@ -142,12 +142,13 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(card);
     });
     
-    // Observe skill items
-    const skillItems = document.querySelectorAll('.skill__item');
-    skillItems.forEach(item => {
-        item.classList.add('fade-in');
-        observer.observe(item);
+    // Observe skill tags (HTML uses .skill__tag)
+    const skillTagsForObserver = document.querySelectorAll('.skill__tag');
+    skillTagsForObserver.forEach(tag => {
+        tag.classList.add('fade-in');
+        observer.observe(tag);
     });
+
     
     
     // ===================================
@@ -332,8 +333,117 @@ document.addEventListener('DOMContentLoaded', function() {
     
     
     // ===================================
+    // CINEMATIC REVEAL + STAGGER
+    // ===================================
+
+    const cinematicObserver = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+
+                entry.target.classList.add('visible');
+
+                // Stagger children if present
+                const children = entry.target.querySelectorAll('[data-stagger]');
+                children.forEach((child) => {
+                    child.classList.add('visible');
+                });
+            });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    // Mark sections for bloom
+    const bloomTargets = document.querySelectorAll('.section');
+    bloomTargets.forEach((section) => {
+        section.classList.add('section-bloom');
+
+        // Convert direct headings + paragraphs + cards into stagger items (non-destructive)
+        const staggerables = section.querySelectorAll('h1,h2,h3,p,.project__card,.skill__tag,.btn');
+        staggerables.forEach((el) => {
+            // Avoid double-staggering elements already animated elsewhere
+            if (el.classList.contains('reveal-stagger')) return;
+            el.classList.add('reveal-stagger');
+
+            // Provide a stable stagger order per section
+            const index = Array.from(staggerables).indexOf(el);
+            el.style.setProperty('--stagger', index * 70);
+
+            // Observe the element itself
+            cinematicObserver.observe(el);
+        });
+
+        // Also observe the section for bloom
+        cinematicObserver.observe(section);
+    });
+
+    // ===================================
+    // 3D TILT + MAGNETIC BUTTONS
+    // ===================================
+
+    function isCoarsePointer() {
+        return window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    }
+
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tiltEnabled = !reduceMotion && !isCoarsePointer();
+
+    const tiltCards = document.querySelectorAll('.project__card');
+    tiltCards.forEach((card) => {
+        card.classList.add('tilt');
+
+        if (!tiltEnabled) return;
+
+        card.addEventListener('pointermove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const px = e.clientX - rect.left;
+            const py = e.clientY - rect.top;
+            const mx = (px / rect.width) * 100;
+            const my = (py / rect.height) * 100;
+
+            const rotY = ((px / rect.width) - 0.5) * 16; // left/right
+            const rotX = -(((py / rect.height) - 0.5) * 12); // up/down
+
+            card.style.setProperty('--mx', `${mx}%`);
+            card.style.setProperty('--my', `${my}%`);
+            card.style.transform = `translateY(-6px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        });
+
+        card.addEventListener('pointerleave', () => {
+            card.style.transform = '';
+        });
+    });
+
+    // Magnetic buttons
+    const magneticBtns = document.querySelectorAll('.btn');
+    magneticBtns.forEach((btn) => {
+        btn.dataset.magnetic = 'true';
+        if (!tiltEnabled) return;
+
+        btn.addEventListener('pointermove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const px = e.clientX - rect.left;
+            const py = e.clientY - rect.top;
+            const mx = (px / rect.width) * 100;
+            const my = (py / rect.height) * 100;
+
+            btn.style.setProperty('--mx', `${mx}%`);
+            btn.style.setProperty('--my', `${my}%`);
+
+            const dx = (mx - 50) / 50; // -1..1
+            const dy = (my - 50) / 50;
+            btn.style.transform = `translate(${dx * 4}px, ${dy * 3}px)`;
+        });
+
+        btn.addEventListener('pointerleave', () => {
+            btn.style.transform = '';
+        });
+    });
+
+    // ===================================
     // SCROLL TO TOP BUTTON (Optional)
     // ===================================
+
     
     // You can add a scroll-to-top button if desired
     // Uncomment the following code and add the button to HTML
@@ -400,10 +510,46 @@ document.addEventListener('DOMContentLoaded', function() {
     // CONSOLE MESSAGE
     // ===================================
     
+    // ===================================
+    // SCROLL-DRIVEN PARALLAX (lightweight)
+    // ===================================
+
+    const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+
+    const onScrollParallax = () => {
+        const y = window.scrollY || 0;
+        const t = clamp(y / 900, 0, 1);
+
+        // Move hero blob + profile subtly
+        const blob = document.querySelector('.hero__blob');
+        const profile = document.querySelector('.home__profile-img');
+
+        if (blob) {
+            blob.style.transform = `translateY(${t * 22}px) rotate(${t * 8}deg) scale(${1 + t * 0.03})`;
+        }
+        if (profile) {
+            profile.style.transform = `translateY(${t * -18}px)`;
+        }
+
+        // Update CSS vars for shine/bloom centers
+        const mx = 50 + (Math.sin((t + 0.1) * Math.PI * 2) * 12);
+        const my = 20 + (Math.cos((t + 0.2) * Math.PI * 2) * 10);
+        document.documentElement.style.setProperty('--mx', `${mx}%`);
+        document.documentElement.style.setProperty('--my', `${my}%`);
+    };
+
+    window.addEventListener('scroll', onScrollParallax, { passive: true });
+    onScrollParallax();
+
+
+
+
     console.log('%c👋 Welcome to my portfolio!', 'color: #2563eb; font-size: 20px; font-weight: bold;');
+
     console.log('%cInterested in the code? Check out the repository!', 'color: #6b7280; font-size: 14px;');
-    
+
 });
+
 
 // ===================================
 // UTILITY FUNCTIONS
