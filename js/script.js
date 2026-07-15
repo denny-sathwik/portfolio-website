@@ -160,13 +160,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             // Get form fields
             const name = document.getElementById('name');
             const email = document.getElementById('email');
             const subject = document.getElementById('subject');
             const message = document.getElementById('message');
+            const action = contactForm.getAttribute('action') || '';
             
             // Clear previous errors
             clearErrors();
@@ -211,43 +210,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 isValid = false;
             }
             
-            // If form is valid, submit (in real scenario, send to backend)
-            if (isValid) {
-                // Simulate form submission
-                showFormMessage('success', 'Thank you! Your message has been sent successfully.');
-                
-                // Reset form
-                contactForm.reset();
-                
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    formMessage.style.display = 'none';
-                }, 5000);
-                
-                // In a real application, you would send the data to a backend:
-                /*
-                fetch('/api/contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name: name.value,
-                        email: email.value,
-                        subject: subject.value,
-                        message: message.value
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    showFormMessage('success', 'Thank you! Your message has been sent successfully.');
-                    contactForm.reset();
-                })
-                .catch(error => {
-                    showFormMessage('error', 'Oops! Something went wrong. Please try again.');
-                });
-                */
+            if (!isValid) {
+                e.preventDefault();
+                return;
             }
+
+            if (!action || action.includes('YOUR_FORM_ID')) {
+                e.preventDefault();
+                showFormMessage('error', 'Please replace YOUR_FORM_ID with your real form endpoint.');
+                return;
+            }
+
+            showFormMessage('success', 'Sending your message...');
         });
     }
     
